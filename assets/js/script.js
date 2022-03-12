@@ -36,6 +36,9 @@ submitBtn.addEventListener("click", function(event){
             console.log(data2);
         })    
 })
+
+
+//
 .catch(function (err) {
     console.error(err);
 });
