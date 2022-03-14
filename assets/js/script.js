@@ -16,6 +16,7 @@ submitBtn.addEventListener("click", function(event){
     var apiURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
     console.log(apiURL);
     event.preventDefault();
+
     fetch(apiURL)
     .then(function (res) {
         return res.json();
@@ -26,12 +27,14 @@ submitBtn.addEventListener("click", function(event){
         var currentData = data;
 
         var api2URL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + currentData.coord.lat + "&lon=" + currentData.coord.lon + "&appid=" + apiKey;
-        console.log(api2URL);
         event.preventDefault();
+
         fetch(api2URL)
+
         .then(function (res) {
             return res.json();
         })
+
         .then(function (data2) {
             console.log(data2);
         })    
