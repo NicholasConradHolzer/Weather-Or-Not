@@ -1,19 +1,33 @@
 // const { escapeXML } = require("ejs");
 // const { Template } = require("ejs");
 
-var current = document.querySelector("#current");
-
-// var fiveDay = document.querySelector("#5day");
-var searchLabel = document.querySelector("#searchLabel");
-
-var searchInput = document.querySelector("#searchInput");
-
-var submitBtn = document.querySelector("#submitBtn");
-
 var apiKey = "13f6e1ce2c55bbeec150c9d169520dd1"; 
 //388964fc2ffae47f3a212b1f9aac6d8b  <--Alternate API key may be needed.
+//submit button:
 
-
+var submitBtn = document.querySelector("#submitBtn");
+//Holder for current weatherr information:
+var current = document.querySelector("#current");
+//current search header
+var searchLabel = document.querySelector("#searchLabel");
+//cointainer for the five day forcast
+var fiveDay = document.querySelector("#5day");
+//searchbar input
+var searchInput = document.querySelector("#searchInput");
+//current tempurature
+var temp = document.querySelector("#temp")
+//current wind data
+var wind = document.querySelector("#wind")
+//current humidiity
+var humidity = document.querySelector("#humid")
+//current uv
+var uvIndex = document.querySelector("#uv")
+//history container
+var historyBar = document.querySelector("historyBlocks")
+//header for five day forcast
+var fiveDayHead = document.querySelector("#5dayHead")
+//pull local storage for the info for history bar: the item geted 
+var cityArray=JSON.parse(localStorage.getItem("History")) ||[];
 
 
 //It was suggested I refactor my Script to address seperation of needs :(
