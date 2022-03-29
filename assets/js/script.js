@@ -13,6 +13,10 @@ var searchInput = document.querySelector("#searchInput");
 var current = document.querySelector("#currentStats");
 //current search header
 var searchLabel = document.querySelector("#searchLabel");
+
+var placeHolder = document.querySelector("#placeHolder");
+
+var cityName = document.querySelector("#cityName");
 //current tempurature
 var temp = document.querySelector("#temp");
 //current wind data
@@ -22,7 +26,7 @@ var humidity = document.querySelector("#humid");
 //current uv
 var uvIndex = document.querySelector("#uv");
 //history container
-var historyBar = document.querySelector("historyBlocks")
+var historyBar = document.querySelector("#searchHistory")
 //header for five day forcast
 var fiveDayHead = document.querySelector("#f5dayHead")
 //cointainer for the five day forcast
@@ -42,23 +46,29 @@ function dataFetch(city) {
     .then(function (data) {
         // console.log(data);
         if(data.cod!=="404"){
-            historySel(city);
+            historyFind(city);
         }
         else if(data.cod==="404") {
             searchInput.value= "";
             alert("Please Enter Valid City-Name");
             return;
         }
+        
+        placeHolder.classList.add("d-none")
+        cityName.textContent = data.name;
+        cityName.classList.remove("d-none")
+        
+
         //run relevent data from search query to pull specific weather data from One-Call weather API
         // console.log(data);
         var oneCallApiURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+ data.coord.lat + "&lon="+data.coord.lon + "&exclude=minutely,hourly,alerts&units=imperial&appid=" + apiKey;
-        console.log(oneCallApiURL);
+        // console.log(oneCallApiURL);
         //import weather visual icon for added information clarity
+        var iconDisp = document.createElement('img');
         var iconID = data.weather[0].icon;
         var iconFetch = "http://openweathermap.org/img/w/"+ iconID + ".png";
-        var iconDisp = document.createElement('img');
         iconDisp.src = iconFetch;
-
+        cityName.appendChild(iconDisp)
         //maintain presented Date so users can verify relevence of presented data:
         // var dateFetch = data;
         // console.log(dateFetch);
@@ -76,8 +86,7 @@ function dataFetch(city) {
 
         //Display current weather statistics:
         .then(function(data_2){
-            console.log(data_2);
-            temp.textContent = "Temp: " + data_2.current.temp;
+            temp.textContent = "Tempurature: " + data_2.current.temp;
             humidity.textContent = "Humidity: " + data_2.current.humidity;
             wind.textContent = "Wind-speed: " + data_2.current.wind_speed + " MPH";
             uvIndex.textContent = "UV Index: " + data_2.current.uvi;
@@ -107,7 +116,9 @@ function dataFetch(city) {
                     // var dateUse = new Date(dateMilSecs);
                     // var dateDisp = dateUse.toLocalString();
 
-                    forcastDiv.id = el.length
+                    // forcastDiv.id = el.length
+
+
                     //set styling for forcast elements: return and verify satisfies preference
                     forcastDiv.className = "card col-2 bg-secondary"
                     // forcastHead.innerText = dateDisp;
@@ -135,27 +146,28 @@ function dataFetch(city) {
 }
 
 //Previousely Searched Section:
-var historyBar = function(city){
+var historyFind = function(city){
     if(cityArray.indexOf(city)<0){
     cityArray.push(city)
     localStorage.setItem("History", JSON.stringify(cityArray))
     historySel();
 };
-    console.log(cityArray);
+    // console.log(cityArray);
 }
 
-var historySel = function() {
+var historySel = function(event) {
     historyBar.innerHTML="";
     cityArray.forEach(city => {
-        var histClick = document.createElement("button");
+        var histClick = document.createElement("button")
         histClick.className = "mt-1 col-12";
         histClick.id = city;
         histClick.innerText = city;
         histClick.addEventListener("click", function(event) {
             var city = event.target.id;
+            event.preventDefault();
             dataFetch(city);
         })
-        historyDiv.appendChild(historyBar);
+        historyBar.appendChild(histClick);
     });
 }
 
