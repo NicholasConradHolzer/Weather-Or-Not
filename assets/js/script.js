@@ -1,34 +1,34 @@
 // const { escapeXML } = require("ejs");
 // const { Template } = require("ejs");
+var apiKey = "388964fc2ffae47f3a212b1f9aac6d8b"; 
 
-var apiKey = "13f6e1ce2c55bbeec150c9d169520dd1"; 
-//388964fc2ffae47f3a212b1f9aac6d8b  <--Alternate API key may be needed.
+
+//388964fc2ffae47f3a212b1f9aac6d8b "13f6e1ce2c55bbeec150c9d169520dd1" <--Alternate API key may be needed.
 //submit button:
 
 var submitBtn = document.querySelector("#submitBtn");
-//Holder for current weatherr information:
-var current = document.querySelector("#current");
-//current search header
-var searchLabel = document.querySelector("#searchLabel");
-//cointainer for the five day forcast
-var fiveDay = document.querySelector("#5day");
 //searchbar input
 var searchInput = document.querySelector("#searchInput");
+//Holder forgit add . current weatherr information:
+var current = document.querySelector("#currentStats");
+//current search header
+var searchLabel = document.querySelector("#searchLabel");
 //current tempurature
-var temp = document.querySelector("#temp")
+var temp = document.querySelector("#temp");
 //current wind data
-var wind = document.querySelector("#wind")
+var wind = document.querySelector("#wind");
 //current humidiity
-var humidity = document.querySelector("#humid")
+var humidity = document.querySelector("#humid");
 //current uv
-var uvIndex = document.querySelector("#uv")
+var uvIndex = document.querySelector("#uv");
 //history container
 var historyBar = document.querySelector("historyBlocks")
 //header for five day forcast
-var fiveDayHead = document.querySelector("#5dayHead")
+var fiveDayHead = document.querySelector("#f5dayHead")
+//cointainer for the five day forcast
+var fiveDayData = document.querySelector("#f5dayData")
 //pull local storage for the info for history bar: the item geted 
 var cityArray=JSON.parse(localStorage.getItem("History")) ||[];
-
 
 //It was suggested I refactor my Script to address seperation of needs :(
 function dataFetch(city) {
@@ -40,9 +40,9 @@ function dataFetch(city) {
     })
     //verify with user in case of data input errors; allow valid input values to generate dynamic html buttons:
     .then(function (data) {
-        console.log(data);
+        // console.log(data);
         if(data.cod!=="404"){
-            historyCol(city);
+            historySel(city);
         }
         else if(data.cod==="404") {
             searchInput.value= "";
@@ -50,9 +50,9 @@ function dataFetch(city) {
             return;
         }
         //run relevent data from search query to pull specific weather data from One-Call weather API
-        console.log(data);
+        // console.log(data);
         var oneCallApiURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+ data.coord.lat + "&lon="+data.coord.lon + "&exclude=minutely,hourly,alerts&units=imperial&appid=" + apiKey;
-        
+        console.log(oneCallApiURL);
         //import weather visual icon for added information clarity
         var iconID = data.weather[0].icon;
         var iconFetch = "http://openweathermap.org/img/w/"+ iconID + ".png";
@@ -60,12 +60,13 @@ function dataFetch(city) {
         iconDisp.src = iconFetch;
 
         //maintain presented Date so users can verify relevence of presented data:
-        var dateFetch = data.dt;
-        var dateMilSecs = dateFetch*1000;
-        var dateUse = new Date(dateMilSecs);
-        var dateDisp = dateUse.toLocalString();
-        citySearch.textContent = city + " " + dateDisp + " ";
-        citySearch.appendChild(iconDisp);
+        // var dateFetch = data;
+        // console.log(dateFetch);
+        // var dateMilSecs = dateFetch*1000;
+        // var dateUse = new Date(dateMilSecs);
+        // var dateDisp = dateUse.toLocalString();
+        // citySearch.textContent = city + " " + dateDisp + " ";
+        // citySearch.appendChild(iconDisp);
 
 
         fetch(oneCallApiURL)
@@ -75,19 +76,21 @@ function dataFetch(city) {
 
         //Display current weather statistics:
         .then(function(data_2){
-            temp.textContent = "Temp: " + data_2.cuurent.temp;
+            console.log(data_2);
+            temp.textContent = "Temp: " + data_2.current.temp;
             humidity.textContent = "Humidity: " + data_2.current.humidity;
             wind.textContent = "Wind-speed: " + data_2.current.wind_speed + " MPH";
             uvIndex.textContent = "UV Index: " + data_2.current.uvi;
 
-            forcastHeader.classList.remove("d-none")
+            fiveDayHead.classList.remove("d-none")
+            fiveDayData.classList.remove("d-none")
             var dailyStats = data_2.daily;
-            forcast.innerHTML = ""
+            fiveDayData.innerHTML = ""
             searchInput.value = ""
             //generate 5-Day forcast information display; 
             for (let i =0; i < dailyStats.length; i++) {
                 const el = dailyStats[i];
-                if (i>0 && I<6) {
+                if (i > 0 && i < 6 ) {
                     var forcastDiv = document.createElement("div")
                     var forcastHead = document.createElement("h3")
                     var forcastPic = document.createElement('img')
@@ -99,15 +102,15 @@ function dataFetch(city) {
                     var windEl = document.createElement("p")
                     var uvEl = document.createElement("p")
 
-                    var dateFetch = data.dt;
-                    var dateMilSecs = dateFetch*1000;
-                    var dateUse = new Date(dateMilSecs);
-                    var dateDisp = dateUse.toLocalString();
+                    // var dateFetch = data.dt;
+                    // var dateMilSecs = dateFetch*1000;
+                    // var dateUse = new Date(dateMilSecs);
+                    // var dateDisp = dateUse.toLocalString();
 
                     forcastDiv.id = el.length
                     //set styling for forcast elements: return and verify satisfies preference
                     forcastDiv.className = "card col-2 bg-secondary"
-                    h3.innerText = dateDisp;
+                    // forcastHead.innerText = dateDisp;
                     forcastPic.src = forcastPicPull;
 
                     tempEl.textContent = "Tempurature: " + el.temp.day;
@@ -121,7 +124,7 @@ function dataFetch(city) {
                     forcastDiv.appendChild(humidEl);
                     forcastDiv.appendChild(windEl);
                     forcastDiv.appendChild(uvEl);
-                    forcast.appendChild(forcastDiv);
+                    fiveDayData.appendChild(forcastDiv);
                 }
             };
         })
@@ -142,7 +145,7 @@ var historyBar = function(city){
 }
 
 var historySel = function() {
-    historyDiv.innerHTML="";
+    historyBar.innerHTML="";
     cityArray.forEach(city => {
         var histClick = document.createElement("button");
         histClick.className = "mt-1 col-12";
@@ -152,14 +155,15 @@ var historySel = function() {
             var city = event.target.id;
             dataFetch(city);
         })
-        historyDiv.appendChild(histClick);
+        historyDiv.appendChild(historyBar);
     });
 }
 
 historySel();
 
-submitBtn.addEventListener("click", function() {
-    var city = searchInput.value;
+submitBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+    var city = searchInput.value
     if (city === "") {
         alert("Please Enter a City Name");
         return;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="eng">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,30 +8,43 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Weather; or Not!</title>
 </head>
 
 
-<body>
+<body class="flex-domain">
 
 
     <header>
         <h1>Weather; or Not!</h1>
     </header>
+    <!--/*
+    <header class="col-12 bg-primary text-center">
+        <h1 class="display-3">WhereWeather</h1>
+        <p class ="text-dark">Weather Data Provided by: <a class ="text-dark" href="https://openweathermap.org/">Open Weather</a></p>
+    </header>
+-->
+    <div class="d-flex">
 
-
-    <div>
-
+        
+        <form>
         <label id="searchLabel">Search here for your city: </label>
+        <input type="text" id="searchInput"></input>
+        <button id="submitBtn" type="submit">Search</button>
+        </form>
 
-        <input id="searchInput"></input>
+        <div id="searchHistory"> 
+            
+        </div>
 
-        <container id="searchHistory"> 
-            <button id="submitBtn" type="submit">Search</button>
-        </container>
-
-        <container id="historyBlocks">
+        <div id="historyBlocks">
             <!--
                 <div id="1!+n" class="hisBlock">  
                     <p>
@@ -39,32 +52,34 @@
                     </P>
                 </div>
             -->
-        </container>
+        </div>
     </div>
 <div id="allResults"><!--allResults-->
-<container id="mainResult"><!--mainResult-->
-    <div id="currentStats">
-        <h2 id="placeHolder">Look up a city to Check Out its Weather!</h2>
-        <p id="temp"></p>
-        <p id="humid"></p>
-        <p id="wind"></p>
-        <p id="uv"></p>
-    </div>
+    <div id="mainResult"><!--mainResult-->
+        <div id="currentStats">
+            <h2 id="placeHolder">Look up a city to Check Out its Weather!</h2>
+            <p id="temp"></p>
+            <p id="humid"></p>
+            <p id="wind"></p>
+            <p id="uv"></p>
+        </div>
 
 
-<container id="5dayMain"><!--5dayMain-->
-<h2 id="5dayHead">Five-Day Forcast:</h2>
+        <div><!--5dayMain-->
+            <h2 id="f5dayHead" class="d-none">Five-Day Forcast:</h2>
+                <div id="f5dayData" class="d-none"><!--5dayData-->
+                </div><!--5dayData-->
 
-<container id="5dayData"><!--5dayData-->
-</container><!--5dayData-->
+        </div><!--5dayMain-->
+        <!--<container id="5dayData" class="flex-wrap row justify-content-between">
+                    
+        </container>-->
 
-</container><!--5dayMain-->
-
-</container><!--mainResult-->
+    </div><!--mainResult-->
 
 </div><!--allResults-->
 
-
 <script src="assets/js/script.js"></script>
+
 </body>
 </html>
